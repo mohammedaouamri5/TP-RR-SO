@@ -1,0 +1,6 @@
+*.svg
+*LOG*
+*.sh
+bin*
+*.make*
+*Make*
