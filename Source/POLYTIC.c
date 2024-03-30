@@ -191,7 +191,7 @@ char test_by_pro(List Me, List second)
 
 char test_by_time(List ferst, List second)
 {
-    return ferst->info.priority >= second->info.priority; 
+    return ferst->info.time_ariver < second->info.time_ariver;
 }
 char test_by_time_revers(List ferst, List second) {
     return ferst->info.time_ariver >= second->info.time_ariver;
