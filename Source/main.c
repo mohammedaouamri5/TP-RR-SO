@@ -22,10 +22,7 @@ int main(int argc, char const *argv[])
   List TheQueue = NULL; 
   List DONE = NULL; 
   int t = -1 ; 
-
-
   RR( &TheProssuce, &DONE , &t);  
-  PrintList(DONE) ;
 
   // PrintListx
 

@@ -48,29 +48,25 @@ List InsertBY_PTR(List P, List p_head, ComparisonFunction TEST)
 
 void PrintProssce(Prossce p_pross)
 {
-    printf("{\n");
+    printf("\t{\n");
 
-    printf("\ttime_ariver : %d ,\n", p_pross.time_ariver);
-    printf("\ttime_ex : %d , \n", p_pross.time_ex);
-    printf("\tpriority : %d , \n", p_pross.priority);
-    printf("\ttime_sort : %d , \n", p_pross.time_sort);
-    printf("\ttime_attont : %d ,\n", p_pross.time_attont);
-    printf("\ttime_reponse : %d ,\n", p_pross.time_reponse);
+    printf("\t\ttime_ariver : %d ,\n", p_pross.time_ariver);
+    printf("\t\ttime_ex : %d , \n", p_pross.time_ex);
+    printf("\t\tpriority : %d , \n", p_pross.priority);
+    printf("\t\ttime_sort : %d , \n", p_pross.time_sort);
+    printf("\t\ttime_attont : %d ,\n", p_pross.time_attont);
+    printf("\t\ttime_reponse : %d ,\n", p_pross.time_reponse);
 
-    printf("}\n");
+    printf("\t},\n");
 }
 
 void PrintList(List p_head)
 {
-    if (p_head != NULL)
-    {
-        PrintProssce(p_head->info);
-        PrintList(p_head->Next);
-    }
-    else
-    {
-        printf("------------------------------------------------------\n");
-    }
+    printf("------------------------------------------------------\n{\n");
+    for(List I = p_head; I != NULL; I = I->Next) 
+        PrintProssce(I->info);
+    
+    printf("\n}\n------------------------------------------------------\n");
 }
 
 Prossce TESTScanfProssce(int exe, int arrive, int prop)
