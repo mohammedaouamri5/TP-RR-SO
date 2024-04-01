@@ -14,12 +14,10 @@ int min(int a, int b)
         return b;
 }
 
-
 char test_by_pro(List Me, List P);
 char test_by_time(List Me, List P);
 char test_by_time_revers(List Me, List P);
 char test_by_time_and_pro(List Me, List P);
-
 
 char at_ferst(List Me, List P)
 {
@@ -32,7 +30,7 @@ char at_end(List Me, List P)
 void add(List Queues[3], List *TheProssuce, int *t);
 int IsDone(List result);
 void destribute(List *TheProssuce, List Queues[3]);
-void printqueues(List Queues[3]);
+void printqueues(List[3], int);
 int I_can_run(List __Queue[3], int *__index);
 
 List ScanfProssces()
@@ -77,8 +75,7 @@ List TESTScanfProssces()
     return prossces;
 }
 
-
-void printqueues(List Queues[3])
+void printqueues(List Queues[3], int just_the_head)
 {
     printf("\n-------------prints queues----------\n");
     printf("Queues {%x,%x,%x}", Queues[0], Queues[1], Queues[2]);
@@ -87,7 +84,18 @@ void printqueues(List Queues[3])
         printf("\n------------------------------------\n");
         printf("\nQueue %d: ", i + 1);
         if (Queues[i] != NULL)
-            PrintList(Queues[i]);
+        {
+            if (just_the_head)
+            {
+                PrintProssce(Queues[i]->info);
+            }
+            else
+            {
+
+                PrintList(Queues[i]);
+            }
+        }
+
         else
         {
             printf("is empty\n", i + 1);
@@ -96,6 +104,7 @@ void printqueues(List Queues[3])
     printf("\n------------------------------------\n");
     printf("\n");
 }
+
 int I_can_run(List __Queue[3], int *__index)
 {
 
@@ -114,7 +123,7 @@ List run(List __Queues[3], int *__index, List *TheProssuce, int *t)
     return PoPHead(&(__Queues[*__index]));
 }
 
-inline int  IsDone(List result)
+inline int IsDone(List result)
 {
     puts("Is it done ?? \n");
     return (((result))->info.time_attont == ((result))->info.time_ex);
@@ -131,25 +140,40 @@ int I_have_to_add(List Queues[3], List *TheProssuce, int *t)
 
     for (size_t i = 0; (i < 3); i++)
     {
-        if (Queues[i] == NULL)
+        if (Queues[i] != NULL)
         {
-            return 1;
+            return 0;
         }
     }
-    return 0;
+    return 1;
 }
-
 
 int what_to_run(List Queues[3], int ___index)
 {
     puts("what to run ...");
+    int the_min = -1;
+    printqueues(Queues, 1);
+
     for (size_t i = 0; i < 3; i++)
     {
         if (Queues[(___index + 1 + i) % 3] != NULL)
             return (___index + 1 + i) % 3;
     }
-
     return -1;
+
+    // for (size_t i = 0; i < 3; i++)
+    // {
+    //     if (Queues[i] != NULL)
+    //     {
+    //         if (the_min == -1) the_min = (___index + 1 + i) % 3;
+    //         else if (Queues[(___index + 1 + i) % 3]->info.priority > Queues[the_min]->info.priority)
+    //         {
+    //             the_min = (___index + 1 + i) % 3;
+    //         }
+    //     }
+    // }
+
+    return the_min;
 }
 
 void get_him_out(List result, List *DONES, int *t)
@@ -172,88 +196,103 @@ int is_it_done(List Queues[3], List *TheProssuce, int *t)
     return wtr || ihta;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 char test_by_pro(List Me, List second)
 {
-    return Me->info.priority >= second->info.priority;
+    return Me->info.priority > second->info.priority;
 }
 
 char test_by_time(List ferst, List second)
 {
     return ferst->info.time_ariver < second->info.time_ariver;
 }
-char test_by_time_revers(List ferst, List second) {
+char test_by_time_revers(List ferst, List second)
+{
     return ferst->info.time_ariver >= second->info.time_ariver;
 }
 char test_by_time_and_pro(List ferst, List second)
 {
-    if (ferst->info.time_ariver < second->info.time_ariver)
+    if (ferst->info.time_ariver > second->info.time_ariver)
         return 1;
     else if (ferst->info.time_ariver == second->info.time_ariver)
-        return test_by_pro(ferst , second) ;
+        return test_by_pro(ferst, second);
     else
         return 0;
 }
 
-
-
-
-
-
-void add(List Queues[3], List *TheProssuce, int *t)
+void destribute(List *TheProssuce, List Queues[3])
 {
-    puts("Adding ...");
-    if (*TheProssuce != NULL)
+    int i = 0;
+    while (*TheProssuce)
     {
-        List ___new = PoPHead(TheProssuce);
-        *t = __MAX__(___new->info.time_ariver , *t) ;
-        PrintProssce(___new->info);
-        int __index = (___new->info.time_ex - 1) / 3;
-        __index = __MIN__(__index, 2);
-        Queues[__index] = InsertBY_PTR(___new, Queues[__index], test_by_time_and_pro);
-
+        add(Queues, TheProssuce, &i);
     }
 }
 
+void add(List Queues[3], List *TheProssuce, int *t)
+{
+    printf("Adding  To -> ");
+    if (*TheProssuce != NULL)
+    {
+        // PrintList(*TheProssuce);
+        List ___new = PoPHead(TheProssuce);
+        // PrintProssce(___new->info);
+        *t = __MAX__(___new->info.time_ariver, *t);
+        int __index = (___new->info.time_ex - 1) / 3;
+        __index = __MIN__(__index, 2);
+        Queues[__index] = InsertBY_PTR_rev(___new, Queues[__index], test_by_pro);
+
+        // printqueues(Queues , 0);
+    }
+}
+TheAdding(List Queues[3], List *TheProssuce, int *t)
+{
+    while (I_have_to_add(Queues, TheProssuce, t))
+        add(Queues, TheProssuce, t);
+}
+
+TheRunnig(List Queues[3], List *TheProssuce, int *t, int *index, List *result)
+{
+    *index = what_to_run(Queues, *index);
+    printf("{index = %d}\n", *index);
+    printf("{press preprity = %d}\n", Queues[*index]->info.priority);
+    printf("{queue = %d}\n", *index + 1);
+    *result = run(Queues, index, TheProssuce, t);
+}
+
+TheRemmoving(List Queues[3], List *DONES, int *t, int *index, List *result)
+{
+    if (*result == NULL)
+    {
+        printf("result is null\n");
+        return(6);
+    }
+
+    if (IsDone(*result))
+        get_him_out(*result, DONES, t);
+    else
+        Queues[*index] = InsertBY_PTR(*result, Queues[*index], at_end); // add in the end
+}
 void RR(List *TheProssuce, List *DONES, int *t)
 {
     printf("Im IN ");
     List Queues[3] = {NULL, NULL, NULL};
     // destribute(TheProssuce, Queues);
-    int GO = 20, index = 0;
+    int GO = 1, index = 0;
     List result = NULL;
     while (GO)
     {
         printf("-----------------------(%d started)-----------------------\n{", *t);
-        if (I_have_to_add(Queues, TheProssuce, t))
-             add(Queues, TheProssuce, t);
 
-        index = what_to_run(Queues, index);
-        printf("{index = %d}\n", index);
-        printf("{press preprity = %d}\n", Queues[index]->info.priority);
-        printf("{queue = %d}\n", index +1 );
-        result = run(Queues, &index, TheProssuce, t);
-        if (IsDone(result))
-            get_him_out(result, DONES, t);
-        else
-            Queues[index] = InsertBY_PTR(result, Queues[index], at_end); // add in the end
+        TheAdding(Queues, TheProssuce, t);
+        TheRunnig(Queues, TheProssuce, t, &index, &result);
+        TheRemmoving(Queues, DONES, t, &index, &result);
+
         GO = is_it_done(Queues, TheProssuce, t);
-        result = NULL;
+         
         printf("}\n-----------------------(ended on %d)-----------------------\n", *t);
     }
     printf("--------------------(THE END)-----------------------\n", *t);
-    // printqueues(Queues);
+    printqueues(Queues, 0);
 
     PrintList(*DONES);
     // PrintList(*TheProssuce);

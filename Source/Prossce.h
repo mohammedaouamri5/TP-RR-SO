@@ -44,6 +44,7 @@ void PrintProssce(Prossce p_pross);
 void PrintList(List p_head);
 List PoPHead(List *p_head) ;
 List InsertBY_PTR(List P, List p_head, ComparisonFunction TEST);
+List InsertBY_PTR_rev(List P, List p_head, ComparisonFunction TEST);
 Prossce TESTScanfProssce(int exe , int arrive, int prop);
 
 

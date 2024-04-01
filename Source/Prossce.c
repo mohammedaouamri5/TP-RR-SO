@@ -16,6 +16,10 @@ List Insert(Prossce p_pross, List p_head, ComparisonFunction TEST)
     return InsertBY_PTR(P, p_head, TEST);
 }
 
+
+
+
+
 List InsertBY_PTR(List P, List p_head, ComparisonFunction TEST)
 {
     if(P == NULL) return p_head;
@@ -45,6 +49,26 @@ List InsertBY_PTR(List P, List p_head, ComparisonFunction TEST)
     }
     return p_head;
 }
+
+List InsertBY_PTR_rev(List P, List p_head, ComparisonFunction TEST)
+{
+    if (P == NULL)
+        return p_head;
+    
+    P->Next = NULL;
+
+    if (p_head == NULL || (*TEST)(p_head, P))
+    {
+        P->Next = p_head;
+        return P;
+    }
+
+    p_head->Next = InsertBY_PTR(P, p_head->Next, TEST);
+    return p_head;
+}
+
+
+
 
 void PrintProssce(Prossce p_pross)
 {
